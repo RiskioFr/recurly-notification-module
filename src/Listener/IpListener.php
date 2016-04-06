@@ -4,6 +4,7 @@ namespace Riskio\Recurly\NotificationModule\Listener;
 use VectorFace\Whip\Whip;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Http\Response as HttpResponse;
+use Zend\Log\LoggerInterface;
 use Zend\Mvc\MvcEvent;
 
 class IpListener extends AbstractAuthorizationListener
@@ -13,9 +14,15 @@ class IpListener extends AbstractAuthorizationListener
      */
     private $whip;
 
-    public function __construct(Whip $whip)
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(Whip $whip, LoggerInterface $logger)
     {
-        $this->whip = $whip;
+        $this->whip   = $whip;
+        $this->logger = $logger;
     }
 
     public function attach(EventManagerInterface $events, $priority = 1)

@@ -19,8 +19,9 @@ class AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
     public function testAttachEvent()
     {
         $authAdapter = $this->prophesize(AuthAdapter::class);
+        $logger      = $this->prophesize(LoggerInterface::class);
 
-        $listener = new AuthenticationListener($authAdapter->reveal());
+        $listener = new AuthenticationListener($authAdapter->reveal(), $logger->reveal());
 
         $eventManager = $this->prophesize(EventManagerInterface::class);
         $eventManager
@@ -49,10 +50,11 @@ class AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
         $authAdapter = $this->prophesize(AuthAdapter::class);
         $authAdapter
             ->authenticate()
-            ->willReturn($authenticationResult->reveal())
-            ->shouldBeCalled();
+            ->willReturn($authenticationResult->reveal());
 
-        $listener = new AuthenticationListener($authAdapter->reveal());
+        $logger = $this->prophesize(LoggerInterface::class);
+
+        $listener = new AuthenticationListener($authAdapter->reveal(), $logger->reveal());
         $listener->onResult($event);
 
         $this->assertEmpty($event->getError());
@@ -86,12 +88,10 @@ class AuthenticationListenerTest extends \PHPUnit_Framework_TestCase
             ->authenticate()
             ->willReturn($authenticationResult->reveal());
 
-        $listener = new AuthenticationListener($authAdapter->reveal());
-
         $logger = $this->prophesize(LoggerInterface::class);
         $logger->info(Argument::any())->shouldBeCalled();
 
-        $listener->setLogger($logger->reveal());
+        $listener = new AuthenticationListener($authAdapter->reveal(), $logger->reveal());
 
         $listener->onResult($event);
 

@@ -1,13 +1,14 @@
 <?php
 namespace Riskio\Recurly\NotificationModule\Factory;
 
+use Interop\Container\ContainerInterface;
 use Riskio\Recurly\NotificationModule\Exception;
 use Zend\Log\Logger;
 use Zend\Log\LoggerInterface;
 
 class LoggerFactory
 {
-    public function __invoke($serviceLocator) : LoggerInterface
+    public function __invoke(ContainerInterface $serviceLocator) : LoggerInterface
     {
         $config = $serviceLocator->get('Riskio\Recurly\NotificationModule\Config');
         $logger = $serviceLocator->get($config['notification']['logger']);

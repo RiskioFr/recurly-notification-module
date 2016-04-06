@@ -4,6 +4,7 @@ namespace Riskio\Recurly\NotificationModule\Listener;
 use Zend\Authentication\Adapter\Http as AuthAdapter;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Http\Response as HttpResponse;
+use Zend\Log\LoggerInterface;
 use Zend\Mvc\MvcEvent;
 
 class AuthenticationListener extends AbstractAuthorizationListener
@@ -13,9 +14,15 @@ class AuthenticationListener extends AbstractAuthorizationListener
      */
     private $authAdapter;
 
-    public function __construct(AuthAdapter $authAdapter)
+    /**
+     * LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(AuthAdapter $authAdapter, LoggerInterface $logger)
     {
         $this->authAdapter = $authAdapter;
+        $this->logger      = $logger;
     }
 
     public function attach(EventManagerInterface $events, $priority = 1)

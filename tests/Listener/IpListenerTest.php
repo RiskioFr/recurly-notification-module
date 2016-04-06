@@ -1,10 +1,15 @@
 <?php
 namespace Riskio\Recurly\NotificationModuleTest\Listener;
 
+use Prophecy\Argument;
 use Riskio\Recurly\NotificationModule\Listener\IpListener;
 use Riskio\Recurly\NotificationModule\Module;
+use VectorFace\Whip\Whip;
+use Zend\EventManager\EventManagerInterface;
 use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
+use Zend\Log\LoggerInterface;
+use Zend\Mvc\Application;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Router\RouteMatch;
 
@@ -12,39 +17,39 @@ class IpListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function testAttachEvent()
     {
-        $whip = $this->getMock('VectorFace\Whip\Whip');
+        $whip   = $this->prophesize(Whip::class);
+        $logger = $this->prophesize(LoggerInterface::class);
 
-        $listener = new IpListener($whip);
+        $listener = new IpListener($whip->reveal(), $logger->reveal());
 
-        $eventManager = $this->getMock('Zend\EventManager\EventManagerInterface');
+        $eventManager = $this->prophesize(EventManagerInterface::class);
         $eventManager
-            ->expects($this->once())
-            ->method('attach')
-            ->with(MvcEvent::EVENT_ROUTE);
+            ->attach(MvcEvent::EVENT_ROUTE, Argument::type('array'), Argument::type('int'))
+            ->shouldBeCalled();
 
-        $listener->attach($eventManager);
+        $listener->attach($eventManager->reveal());
     }
 
     public function testProperlyFillEventOnAuthorization()
     {
-        $whip = $this->getMock('VectorFace\Whip\Whip');
-        $whip
-            ->expects($this->once())
-            ->method('getValidIpAddress')
-            ->will($this->returnValue(true));
+        $whip = $this->prophesize(Whip::class);
+        $whip->getValidIpAddress()->willReturn(true);
+
+        $logger = $this->prophesize(LoggerInterface::class);
 
         $event      = new MvcEvent();
         $request    = new HttpRequest();
         $response   = new HttpResponse();
-        $routeMatch = new RouteMatch([]);
 
+        $routeMatch = new RouteMatch([]);
         $routeMatch->setMatchedRouteName(Module::RECURLY_NOTIFICATION_ROUTE);
+
         $event
             ->setRequest($request)
             ->setResponse($response)
             ->setRouteMatch($routeMatch);
 
-        $listener = new IpListener($whip);
+        $listener = new IpListener($whip->reveal(), $logger->reveal());
         $listener->onResult($event);
 
         $this->assertEmpty($event->getError());
@@ -53,43 +58,32 @@ class IpListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testProperlySetUnauthorizedAndTriggerEventOnUnauthorization()
     {
-        $whip = $this->getMock('VectorFace\Whip\Whip');
-        $whip
-            ->expects($this->once())
-            ->method('getValidIpAddress')
-            ->will($this->returnValue(false));
+        $whip = $this->prophesize(Whip::class);
+        $whip->getValidIpAddress()->willReturn(false);
+        $whip->getIpAddress()->willReturn('127.0.0.1');
+
+        $logger = $this->prophesize(LoggerInterface::class);
+        $logger->info(Argument::any())->shouldBeCalled();
 
         $event      = new MvcEvent();
         $request    = new HttpRequest();
         $response   = new HttpResponse();
+
         $routeMatch = new RouteMatch([]);
-
-        $application  = $this->getMockBuilder('Zend\Mvc\Application')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $eventManager = $this->getMock('Zend\EventManager\EventManagerInterface');
-
-        $application
-            ->expects($this->any())
-            ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
-
         $routeMatch->setMatchedRouteName(Module::RECURLY_NOTIFICATION_ROUTE);
+
+        $application  = $this->prophesize(Application::class);
+        $eventManager = $this->prophesize(EventManagerInterface::class);
+
+        $application->getEventManager()->willReturn($eventManager->reveal());
+
         $event
             ->setRequest($request)
             ->setResponse($response)
             ->setRouteMatch($routeMatch)
-            ->setApplication($application);
+            ->setApplication($application->reveal());
 
-        $listener = new IpListener($whip);
-
-        $logger = $this->getMock('Zend\Log\LoggerInterface');
-
-        $logger
-            ->expects($this->once())
-            ->method('info');
-
-        $listener->setLogger($logger);
+        $listener = new IpListener($whip->reveal(), $logger->reveal());
 
         $listener->onResult($event);
 

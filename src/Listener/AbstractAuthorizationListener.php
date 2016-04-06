@@ -6,13 +6,11 @@ use Riskio\Recurly\NotificationModule\Module;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\Request as HttpRequest;
-use Zend\Log\LoggerAwareTrait;
 use Zend\Mvc\MvcEvent;
 
 abstract class AbstractAuthorizationListener implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
-    use LoggerAwareTrait;
 
     public function onResult(MvcEvent $event)
     {

@@ -1,11 +1,12 @@
 <?php
 namespace Riskio\Recurly\NotificationModule\Factory;
 
+use Interop\Container\ContainerInterface;
 use Riskio\Recurly\NotificationModule\Exception\RuntimeException;
 
 class ConfigFactory
 {
-    public function __invoke($serviceLocator) : array
+    public function __invoke(ContainerInterface $serviceLocator) : array
     {
         $config = $serviceLocator->get('Config');
 
