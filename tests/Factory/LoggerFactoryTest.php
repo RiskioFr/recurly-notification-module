@@ -15,9 +15,7 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
         $container
             ->get('Riskio\Recurly\NotificationModule\Config')
             ->willReturn([
-                'notification' => [
-                    'logger' => Logger::class,
-                ],
+                'logger' => Logger::class,
             ]);
         $container
             ->get(Logger::class)
@@ -35,9 +33,7 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
         $container
             ->get('Riskio\Recurly\NotificationModule\Config')
             ->willReturn([
-                'notification' => [
-                    'logger' => 'Foo\Log\Logger',
-                ],
+                'logger' => 'Foo\Log\Logger',
             ]);
         $container
             ->get('Foo\Log\Logger')

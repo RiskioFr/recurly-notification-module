@@ -17,16 +17,14 @@ class AuthenticationGuardFactoryTest extends \PHPUnit_Framework_TestCase
         $container
             ->get('Riskio\Recurly\NotificationModule\Config')
             ->willReturn([
-                'notification' => [
-                    'guards' => [
-                        AuthenticationGuard::class => [
-                            'auth_adapter' => [
-                                'config' => [
-                                    'accept_schemes' => 'basic',
-                                    'realm'          => 'MyApp Site',
-                                ],
-                                'passwd_file'  => __DIR__ . '/_files/passwd.txt',
+                'guards' => [
+                    AuthenticationGuard::class => [
+                        'auth_adapter' => [
+                            'config' => [
+                                'accept_schemes' => 'basic',
+                                'realm'          => 'MyApp Site',
                             ],
+                            'passwd_file'  => __DIR__ . '/_files/passwd.txt',
                         ],
                     ],
                 ],

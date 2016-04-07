@@ -10,7 +10,7 @@ class IpGuardFactory
     public function __invoke(ContainerInterface $serviceLocator) : IpGuard
     {
         $config = $serviceLocator->get('Riskio\Recurly\NotificationModule\Config');
-        $whip = $this->createWhipFromConfig($config['notification']['guards'][IpGuard::class]);
+        $whip = $this->createWhipFromConfig($config['guards'][IpGuard::class]);
 
         $logger = $serviceLocator->get('Riskio\Recurly\NotificationModule\Logger');
 

@@ -10,8 +10,8 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateService()
     {
         $container = $this->prophesize(ContainerInterface::class);
-        $container->get('Config')->willReturn([
-            'recurly' => [],
+        $container->get('Riskio\Recurly\ClientModule\Config')->willReturn([
+            'notification' => [],
         ]);
 
         $factory = new ConfigFactory();
@@ -23,7 +23,7 @@ class ConfigFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateServiceWithoutRecurlyConfigKey()
     {
         $container = $this->prophesize(ContainerInterface::class);
-        $container->get('Config')->willReturn([]);
+        $container->get('Riskio\Recurly\ClientModule\Config')->willReturn([]);
 
         $factory = new ConfigFactory();
 

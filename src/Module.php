@@ -20,7 +20,7 @@ class Module
         $eventManager->attach($serviceManager->get(GuardListener::class));
 
         $config = $serviceManager->get('Riskio\Recurly\NotificationModule\Config');
-        $listeners = $config['notification']['listeners'] ?? [];
+        $listeners = $config['listeners'] ?? [];
 
         if (is_array($listeners)) {
             $notificationHandler = $serviceManager->get(NotificationHandler::class);

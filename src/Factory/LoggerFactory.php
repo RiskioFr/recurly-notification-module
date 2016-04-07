@@ -12,7 +12,7 @@ class LoggerFactory
     public function __invoke(ContainerInterface $serviceLocator) : LoggerInterface
     {
         $config = $serviceLocator->get('Riskio\Recurly\NotificationModule\Config');
-        $logger = $serviceLocator->get($config['notification']['logger']);
+        $logger = $serviceLocator->get($config['logger']);
 
         if ($logger instanceof ZendLoggerInterface) {
             $logger = new PsrLoggerAdapter($logger);

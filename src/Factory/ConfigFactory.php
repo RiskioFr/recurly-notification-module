@@ -8,12 +8,12 @@ class ConfigFactory
 {
     public function __invoke(ContainerInterface $serviceLocator) : array
     {
-        $config = $serviceLocator->get('Config');
+        $config = $serviceLocator->get('Riskio\Recurly\ClientModule\Config');
 
-        if (!isset($config['recurly'])) {
-            throw new RuntimeException('Recurly configuration must be defined. Did you copy the config file?');
+        if (!isset($config['notification'])) {
+            throw new RuntimeException('Recurly notification configuration must be defined. Did you copy the config file?');
         }
         
-        return $config['recurly'];
+        return $config['notification'];
     }
 }

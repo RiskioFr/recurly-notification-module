@@ -12,7 +12,7 @@ class AuthenticationGuardFactory
     {
         $config = $serviceLocator->get('Riskio\Recurly\NotificationModule\Config');
         $authAdapter = $this->createAuthenticationAdapterFromConfig(
-            $config['notification']['guards'][AuthenticationGuard::class]
+            $config['guards'][AuthenticationGuard::class]
         );
 
         $logger = $serviceLocator->get('Riskio\Recurly\NotificationModule\Logger');

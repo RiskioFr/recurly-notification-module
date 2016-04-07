@@ -18,17 +18,15 @@ class IpGuardFactoryTest extends \PHPUnit_Framework_TestCase
         $container
             ->get('Riskio\Recurly\NotificationModule\Config')
             ->willReturn([
-                'notification' => [
-                    'guards' => [
-                        IpGuard::class => [
-                            'white_list' => [
-                                '74.201.212.175',
-                                '64.74.141.175',
-                                '75.98.92.102',
-                                '74.201.212.0/24',
-                                '64.74.141.0/24',
-                                '75.98.92.96/28',
-                            ],
+                'guards' => [
+                    IpGuard::class => [
+                        'white_list' => [
+                            '74.201.212.175',
+                            '64.74.141.175',
+                            '75.98.92.102',
+                            '74.201.212.0/24',
+                            '64.74.141.0/24',
+                            '75.98.92.96/28',
                         ],
                     ],
                 ],
