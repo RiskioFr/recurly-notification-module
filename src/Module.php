@@ -14,20 +14,18 @@ class Module
     {
         $application = $e->getApplication();
         $serviceManager = $application->getServiceManager();
-        $config = $serviceManager->get('Riskio\Recurly\NotificationModule\Config');
 
-        /* @var $eventManager \Zend\EventManager\EventManagerInterface */
         $eventManager = $application->getEventManager();
-
-        $notificationConfig = $config['notification'];
-
         $eventManager->attach($serviceManager->get(ErrorListener::class));
         $eventManager->attach($serviceManager->get(GuardListener::class));
 
-        if (!empty($notificationConfig['listeners']) && is_array($notificationConfig['listeners'])) {
+        $config = $serviceManager->get('Riskio\Recurly\NotificationModule\Config');
+        $listeners = $config['notification']['listeners'] ?? [];
+
+        if (is_array($listeners)) {
             $notificationHandler = $serviceManager->get(NotificationHandler::class);
 
-            foreach ($notificationConfig['listeners'] as $service) {
+            foreach ($listeners as $service) {
                 $listener = $serviceManager->get($service);
                 $notificationHandler->getEventManager()->attach($listener);
             }
