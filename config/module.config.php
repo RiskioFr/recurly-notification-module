@@ -4,9 +4,8 @@ return [
         'notification' => [
             'logger' => 'Zend\Log\Logger',
 
-            'security' => [
-                'ip_checking' => [
-                    'enabled' => true,
+            'guards' => [
+                'Riskio\Recurly\NotificationModule\Guard\IpGuard' => [
                     'white_list' => [
                         '74.201.212.175',
                         '64.74.141.175',
@@ -17,8 +16,7 @@ return [
                     ],
                 ],
 
-                'authentication' => [
-                    'enabled' => false,
+                'Riskio\Recurly\NotificationModule\Guard\AuthenticationGuard' => [
                     'auth_adapter' => [
                         'config' => [
                             'accept_schemes' => 'basic',
@@ -30,8 +28,6 @@ return [
                     ],
                 ],
             ],
-
-            'listeners' => [],
         ],
     ],
 
@@ -45,15 +41,15 @@ return [
         'invokables' => [
             'Riskio\Recurly\NotificationModule\Listener\ErrorListener' => 'Riskio\Recurly\NotificationModule\Listener\ErrorListener',
             'Riskio\Recurly\NotificationModule\Notification\Handler'   => 'Riskio\Recurly\NotificationModule\Notification\Handler',
+            'Riskio\Recurly\NotificationModule\Specification\IsNotificationEvent' => 'Riskio\Recurly\NotificationModule\Specification\IsNotificationEvent',
             'Zend\Log\Logger' => 'Zend\Log\Logger',
         ],
         'factories' => [
-            'Riskio\Recurly\NotificationModule\AuthenticationAdapter'           => 'Riskio\Recurly\NotificationModule\Factory\AuthenticationAdapterFactory',
-            'Riskio\Recurly\NotificationModule\Config'                          => 'Riskio\Recurly\NotificationModule\Factory\ConfigFactory',
-            'Riskio\Recurly\NotificationModule\Logger'                          => 'Riskio\Recurly\NotificationModule\Factory\LoggerFactory',
-            'Riskio\Recurly\NotificationModule\Listener\AuthenticationListener' => 'Riskio\Recurly\NotificationModule\Factory\AuthenticationListenerFactory',
-            'Riskio\Recurly\NotificationModule\Listener\IpListener'             => 'Riskio\Recurly\NotificationModule\Factory\IpListenerFactory',
-            'Riskio\Recurly\NotificationModule\Whip'                            => 'Riskio\Recurly\NotificationModule\Factory\WhipFactory',
+            'Riskio\Recurly\NotificationModule\Config' => 'Riskio\Recurly\NotificationModule\Factory\ConfigFactory',
+            'Riskio\Recurly\NotificationModule\Guard\AuthenticationGuard' => 'Riskio\Recurly\NotificationModule\Factory\AuthenticationGuardFactory',
+            'Riskio\Recurly\NotificationModule\Guard\IpGuard' => 'Riskio\Recurly\NotificationModule\Factory\IpGuardFactory',
+            'Riskio\Recurly\NotificationModule\Listener\GuardListener' => 'Riskio\Recurly\NotificationModule\Factory\GuardListenerFactory',
+            'Riskio\Recurly\NotificationModule\Logger' => 'Riskio\Recurly\NotificationModule\Factory\LoggerFactory',
         ],
     ],
 

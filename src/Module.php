@@ -1,9 +1,8 @@
 <?php
 namespace Riskio\Recurly\NotificationModule;
 
-use Riskio\Recurly\NotificationModule\Listener\AuthenticationListener;
 use Riskio\Recurly\NotificationModule\Listener\ErrorListener;
-use Riskio\Recurly\NotificationModule\Listener\IpListener;
+use Riskio\Recurly\NotificationModule\Listener\GuardListener;
 use Riskio\Recurly\NotificationModule\Notification\Handler as NotificationHandler;
 use Zend\Mvc\MvcEvent;
 
@@ -22,18 +21,8 @@ class Module
 
         $notificationConfig = $config['notification'];
 
-        if ($notificationConfig['security']['ip_checking']['enabled']) {
-            $ipListener = $serviceManager->get(IpListener::class);
-            $eventManager->attach($ipListener);
-        }
-
-        if ($notificationConfig['security']['authentication']['enabled']) {
-            $authenticationListener = $serviceManager->get(AuthenticationListener::class);
-            $eventManager->attach($authenticationListener);
-        }
-
-        $errorListener = $serviceManager->get(ErrorListener::class);
-        $eventManager->attach($errorListener);
+        $eventManager->attach($serviceManager->get(ErrorListener::class));
+        $eventManager->attach($serviceManager->get(GuardListener::class));
 
         if (!empty($notificationConfig['listeners']) && is_array($notificationConfig['listeners'])) {
             $notificationHandler = $serviceManager->get(NotificationHandler::class);

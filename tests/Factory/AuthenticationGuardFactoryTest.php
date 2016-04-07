@@ -2,20 +2,24 @@
 namespace Riskio\Recurly\NotificationModuleTest\Factory;
 
 use Interop\Container\ContainerInterface;
-use Riskio\Recurly\NotificationModule\Factory\AuthenticationAdapterFactory;
+use Riskio\Recurly\NotificationModule\Factory\AuthenticationGuardFactory;
+use Riskio\Recurly\NotificationModule\Guard\AuthenticationGuard;
 use Zend\Authentication\Adapter\Http as AuthAdapter;
+use Zend\Log\LoggerInterface;
 
-class AuthenticationAdapterFactoryTest extends \PHPUnit_Framework_TestCase
+class AuthenticationGuardFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateService()
     {
+        $logger = $this->prophesize(LoggerInterface::class);
+
         $container = $this->prophesize(ContainerInterface::class);
         $container
             ->get('Riskio\Recurly\NotificationModule\Config')
             ->willReturn([
                 'notification' => [
-                    'security' => [
-                        'authentication' => [
+                    'guards' => [
+                        AuthenticationGuard::class => [
                             'auth_adapter' => [
                                 'config' => [
                                     'accept_schemes' => 'basic',
@@ -27,10 +31,13 @@ class AuthenticationAdapterFactoryTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ]);
+        $container
+            ->get('Riskio\Recurly\NotificationModule\Logger')
+            ->willReturn($logger->reveal());
 
-        $factory = new AuthenticationAdapterFactory();
+        $factory = new AuthenticationGuardFactory();
 
-        $adapter = $factory($container->reveal());
-        $this->assertInstanceOf(AuthAdapter::class, $adapter);
+        $listener = $factory($container->reveal());
+        $this->assertInstanceOf(AuthenticationGuard::class, $listener);
     }
 }
