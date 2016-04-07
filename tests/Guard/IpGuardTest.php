@@ -2,10 +2,10 @@
 namespace Riskio\Recurly\NotificationModuleTest\Guard;
 
 use Prophecy\Argument;
+use Psr\Log\LoggerInterface;
 use Riskio\Recurly\NotificationModule\Guard\IpGuard;
 use VectorFace\Whip\Whip;
 use Zend\Http\Response as HttpResponse;
-use Zend\Log\LoggerInterface;
 use Zend\Mvc\MvcEvent;
 
 class IpGuardTest extends \PHPUnit_Framework_TestCase

@@ -1,12 +1,12 @@
 <?php
 namespace Riskio\Recurly\NotificationModuleTest\Guard;
 
+use Psr\Log\LoggerInterface;
 use Riskio\Recurly\NotificationModule\Guard\AuthenticationGuard;
 use Prophecy\Argument;
 use Zend\Authentication\Adapter\Http as AuthAdapter;
 use Zend\Authentication\Result as AuthResult;
 use Zend\Http\Response as HttpResponse;
-use Zend\Log\LoggerInterface;
 use Zend\Mvc\MvcEvent;
 
 class AuthenticationGuardTest extends \PHPUnit_Framework_TestCase

@@ -1,9 +1,9 @@
 <?php
 namespace Riskio\Recurly\NotificationModule\Guard;
 
+use Psr\Log\LoggerInterface;
 use VectorFace\Whip\Whip;
 use Zend\Http\Response as HttpResponse;
-use Zend\Log\LoggerInterface;
 use Zend\Mvc\MvcEvent;
 
 class IpGuard implements GuardInterface

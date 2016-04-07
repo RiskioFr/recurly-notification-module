@@ -2,10 +2,10 @@
 namespace Riskio\Recurly\NotificationModuleTest\Factory;
 
 use Interop\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Riskio\Recurly\NotificationModule\Factory\IpGuardFactory;
 use Riskio\Recurly\NotificationModule\Guard\IpGuard;
 use VectorFace\Whip\Whip;
-use Zend\Log\LoggerInterface;
 
 class IpGuardFactoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 namespace Riskio\Recurly\NotificationModule\Guard;
 
+use Psr\Log\LoggerInterface;
 use Zend\Authentication\Adapter\Http as AuthAdapter;
 use Zend\Http\Response as HttpResponse;
-use Zend\Log\LoggerInterface;
 use Zend\Mvc\MvcEvent;
 
 class AuthenticationGuard implements GuardInterface

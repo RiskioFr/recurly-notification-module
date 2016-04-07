@@ -2,10 +2,10 @@
 namespace Riskio\Recurly\NotificationModuleTest\Factory;
 
 use Interop\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Riskio\Recurly\NotificationModule\Factory\AuthenticationGuardFactory;
 use Riskio\Recurly\NotificationModule\Guard\AuthenticationGuard;
 use Zend\Authentication\Adapter\Http as AuthAdapter;
-use Zend\Log\LoggerInterface;
 
 class AuthenticationGuardFactoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -7,7 +7,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 class NotificationControllerFactory
 {
-    public function __invoke(ServiceLocatorAwareInterface$serviceLocator) : NotificationController
+    public function __invoke(ServiceLocatorAwareInterface $serviceLocator) : NotificationController
     {
         $handler = $serviceLocator->getServiceLocator()->get(NotificationHandler::class);
 

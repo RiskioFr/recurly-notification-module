@@ -2,9 +2,10 @@
 namespace Riskio\Recurly\NotificationModule\Factory;
 
 use Interop\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Riskio\Recurly\NotificationModule\Exception;
-use Zend\Log\Logger;
-use Zend\Log\LoggerInterface;
+use Zend\Log\LoggerInterface as ZendLoggerInterface;
+use Zend\Log\PsrLoggerAdapter;
 
 class LoggerFactory
 {
@@ -13,18 +14,15 @@ class LoggerFactory
         $config = $serviceLocator->get('Riskio\Recurly\NotificationModule\Config');
         $logger = $serviceLocator->get($config['notification']['logger']);
 
+        if ($logger instanceof ZendLoggerInterface) {
+            $logger = new PsrLoggerAdapter($logger);
+        }
+
         if (! $logger instanceof LoggerInterface) {
             throw new Exception\InvalidArgumentException(sprintf(
                 '`logger` option of Recurly module must be an instance or extend %s class.',
                 LoggerInterface::class
             ));
-        }
-
-        if ($logger instanceof Logger) {
-            $writers = $logger->getWriters()->toArray();
-            if (empty($writers)) {
-                $logger->addWriter('null');
-            }
         }
 
         return $logger;

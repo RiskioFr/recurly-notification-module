@@ -2,17 +2,15 @@
 namespace Riskio\Recurly\NotificationModuleTest\Factory;
 
 use Interop\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Riskio\Recurly\NotificationModule\Exception\InvalidArgumentException;
 use Riskio\Recurly\NotificationModule\Factory\LoggerFactory;
 use Zend\Log\Logger;
-use Zend\Log\LoggerInterface;
 
 class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateService()
     {
-        $logger = $this->prophesize(LoggerInterface::class)->reveal();
-
         $container = $this->prophesize(ContainerInterface::class);
         $container
             ->get('Riskio\Recurly\NotificationModule\Config')
@@ -23,7 +21,7 @@ class LoggerFactoryTest extends \PHPUnit_Framework_TestCase
             ]);
         $container
             ->get(Logger::class)
-            ->willReturn($logger);
+            ->willReturn(new Logger());
 
         $factory = new LoggerFactory();
 
